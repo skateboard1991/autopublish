@@ -6,7 +6,7 @@ from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.keys import Keys
 import time
 import sys
-import re
+
 
 
 def login_by_password(webdriver, username_xpath, user_name, password_xpath, password, login_btn_xpath):
@@ -64,13 +64,14 @@ def input_content(webdriver, title_xpath, title, content_xpath, content, *, is_w
     wait_element_visible(webdriver, title_xpath)
     title_input = webdriver.find_element_by_xpath(title_xpath)
     title_input.send_keys(title)
-    wait_element_visible(webdriver, content_xpath)
+    # wait_element_visible(webdriver, content_xpath)
     content_input = webdriver.find_element_by_xpath(content_xpath)
     if is_wechat:
         content_input.send_keys(Keys.CONTROL, 'v')
     else:
         content = content.replace('"', '\\"').replace('\n', (' \\' + 'n ')).replace('\\"\\n\\"', '\\"\\\\n\\"')
-        script = "arguments[0].innerText=\"%s\"" % content
+        script = "arguments[0].value=\"%s\"" % content
+        print('script is '+script)
         webdriver.execute_script(script, content_input)
 
     if is_wechat:
